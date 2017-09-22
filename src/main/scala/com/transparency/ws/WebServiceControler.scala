@@ -13,7 +13,6 @@ import scala.concurrent.{ExecutionContext, Future}
 //import com.typesafe.config.ConfigFactory
 
 object WebServiceControler {
-  type Works = List[Work]
   val routes: Route = {
     (get & path("search")) {
       logger.debug("GET /search")
@@ -24,10 +23,10 @@ object WebServiceControler {
     } ~ (post & path("work")) {
       logger.debug("POST /work")
       entity(as[WorkKey]) { workKey =>
-        val worksFound: Future[Option[Works]] = fetchWorks(workKey)
+        val worksFound: Future[Works] = fetchWorks(workKey)
         onSuccess(worksFound) {
-          case Some(works) => complete(works)
-          case None => complete(StatusCodes.NoContent)
+          case Nil => complete(StatusCodes.NoContent)
+          case works: Works => complete(works)
         }
       } ~ {
         complete(StatusCodes.BadRequest)
@@ -42,14 +41,13 @@ object WebServiceControler {
   implicit val workFormat: RootJsonFormat[Work] = jsonFormat3(Work)
 
   private implicit val system: ActorSystem = ActorSystem("my-system")
+  private val worksList = List(Work("Ma chanson", "1234", "5678"), Work("Autre chanson", "1111", "2222"))
+
+  type Works = List[Work]
 
   // Fake function in place of SQL request implementation
-  def fetchWorks(workKey: WorkKey): Future[Option[Works]] = Future {
-    // Fake code for test
-    if (workKey.isrc == "1234" || workKey.iswc == "5678")
-      Some(List(Work("Ma chanson", "1234", "5678")))
-    else
-      None
+  def fetchWorks(workKey: WorkKey): Future[Works] = Future {
+    worksList.filter(work => work.isrc == workKey.isrc || work.iswc == workKey.iswc)
   }(ExecutionContext.global)
 
   // domain model
