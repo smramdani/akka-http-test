@@ -98,7 +98,7 @@ object DBAccess {
 
   def workById(workId: Int): Future[Option[Work]] = {
     val query = worksTable.withFilter(w => w.id === workId).map(w => (w.id, w.title, w.isrc, w.iswc))
-    db.run(query.result).map(_.map { case (id, title, isrc, iswc) => Work(id, title, isrc, iswc) }.find(_ => true))
+    db.run(query.result).map(_.map { case (id, title, isrc, iswc) => Work(id, title, isrc, iswc) }.headOption)
   }
 
   def listWorks(): Future[List[Work]] = {

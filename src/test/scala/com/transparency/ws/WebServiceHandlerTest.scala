@@ -25,10 +25,17 @@ class WebServiceHandlerTest extends WordSpec with Matchers with ScalatestRouteTe
 
   "The service" should {
 
-    "process GET requests to /work" in {
+    "process GET requests to /work/1" in {
       // tests:
       Get("/work/1") ~> wsHandler.routes ~> check {
         responseAs[String] shouldEqual s"""{\"id\":1,\"title\":\"Ma chanson\",\"isrc\":\"1234\",\"iswc\":\"5678\"}"""
+      }
+    }
+
+    "process GET requests to /work/10" in {
+      // tests:
+      Get("/work/10") ~> wsHandler.routes ~> check {
+        responseAs[String] shouldEqual s"<h1>Unknown ID 10 !</h1>"
       }
     }
 
