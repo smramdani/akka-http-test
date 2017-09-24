@@ -12,18 +12,22 @@ libraryDependencies ++= {
   val scalaTestV = "3.0.1"
   val slickV = "3.2.1"
   val slf4jV = "1.6.4"
+  val h2DatabaseV = "1.4.196"
 
   Seq(
     "com.typesafe.akka" %% "akka-actor" % akkaV,
+    "com.typesafe.akka" %% "akka-typed" % akkaV,
     "com.typesafe.akka" %% "akka-stream" % akkaV,
-    "com.typesafe.akka" %% "akka-testkit" % akkaV,
-    "com.typesafe.akka" %% "akka-stream-testkit" % akkaV,
-    "com.typesafe.akka" %% "akka-http-spray-json" % akkaHttpV,
     "com.typesafe.akka" %% "akka-http" % akkaHttpV,
-    "com.typesafe.akka" %% "akka-http-testkit" % akkaHttpV,
+    "com.typesafe.akka" %% "akka-http-spray-json" % akkaHttpV,
+    "com.typesafe.akka" %% "akka-testkit" % akkaV % "test",
+    "com.typesafe.akka" %% "akka-stream-testkit" % akkaV % "test",
+    "com.typesafe.akka" %% "akka-http-testkit" % akkaHttpV % "test",
     "org.scalatest" %% "scalatest" % scalaTestV % "test",
     "com.typesafe.slick" %% "slick" % slickV,
-    "org.slf4j" % "slf4j-nop" % slf4jV
+    "ch.qos.logback" % "logback-classic" % "1.2.3",
+    //"org.slf4j" % "slf4j-logback" % slf4jV,
+    "com.h2database" % "h2" % h2DatabaseV
   )
 }
 
